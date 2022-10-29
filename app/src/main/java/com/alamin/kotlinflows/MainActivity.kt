@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 }
         }*/
 
-        CoroutineScope(Main).launch {
+/*        CoroutineScope(Main).launch {
             val data: Flow<Int> = sharedProducer()
             data.collect {
                     Log.d(TAG, "onCreate: 1 $it")
@@ -57,6 +57,13 @@ class MainActivity : AppCompatActivity() {
             delay(2500)
             data.collect {
                     Log.d(TAG, "onCreate: 2 $it")
+                }
+        }*/
+        CoroutineScope(Main).launch {
+            val data: Flow<Int> = stateProducer()
+            delay(3000)
+            data.collect {
+                    Log.d(TAG, "onCreate: $it")
                 }
         }
     }
@@ -80,6 +87,17 @@ class MainActivity : AppCompatActivity() {
                 mutableFlow.emit(it)
                 delay(1000)
                 }
+        }
+        return mutableFlow
+    }
+
+    fun stateProducer(): Flow<Int>{
+        var mutableFlow = MutableStateFlow(10)
+        CoroutineScope(IO).launch{
+            delay(1000)
+            mutableFlow.emit(20)
+            delay(1000)
+            mutableFlow.emit(50)
         }
         return mutableFlow
     }
